@@ -1,5 +1,4 @@
-package com.example.hmacutil;
-
+package com.example.digitalsignature.util;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -17,19 +16,28 @@ public class HMACUtil {
     }
 
     // Sign data using the secret key
-    public static String signData(String data, String secretKey) throws Exception {
-        SecretKey key = new SecretKeySpec(Base64.getDecoder().decode(secretKey), HMAC_ALGORITHM);
+
+    public static String signData(byte[] data, String secret) throws Exception {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), HMAC_ALGORITHM);
         Mac mac = Mac.getInstance(HMAC_ALGORITHM);
-        mac.init(key);
-        byte[] hmacBytes = mac.doFinal(data.getBytes());
-        return Base64.getEncoder().encodeToString(hmacBytes);
+        mac.init(secretKeySpec);
+        byte[] signatureBytes = mac.doFinal(data);
+        // return DatatypeConverter.printHexBinary(signatureBytes);
+        return Base64.getEncoder().encodeToString(signatureBytes);
     }
 
     // Verify the HMAC signature
-    public static boolean verifySignature(String data, String signature, String secretKey) throws Exception {
-        String calculatedSignature = signData(data, secretKey);
-        return calculatedSignature.equals(signature);
-    }
 
+    public static boolean verifySignature(String SignDoc, String secret) throws Exception {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), HMAC_ALGORITHM);
+        Mac mac = Mac.getInstance(HMAC_ALGORITHM);
+        String[] signatureBytes = SignDoc.split("_._");
+        String doc = signatureBytes[0];
+        String DocSignature = signatureBytes[1];
+        mac.init(secretKeySpec);
+        byte[] signatureBytes1 = mac.doFinal(doc.getBytes());
+        String Base64Sign = Base64.getEncoder().encodeToString(signatureBytes1);
+        return Base64Sign.equals(DocSignature);
+    }
 
 }
