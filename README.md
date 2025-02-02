@@ -1,53 +1,63 @@
-# Secure Digital Transactions with HMAC
+# 🚀 Cryptographic Signature API - Spring Boot
 
-This project demonstrates how to secure digital transactions using **HMAC (Hash-Based Message Authentication Code)** in a Spring Boot application. It includes endpoints for generating secret keys, signing transaction data, and verifying digital signatures to ensure the integrity and authenticity of sensitive data.
+## 📌 Description
+Cette API REST permet la **signature et la vérification de messages** en utilisant **trois algorithmes cryptographiques** :
+- **EdDSA (Ed25519)** – Rapide et sécurisé.
+- **ECDSA (secp256r1)** – Utilisé en blockchain et certificats TLS.
+- **RSA (2048-bit)** – Compatibilité avec les systèmes existants.
 
-## Features
+L’API suit une **architecture modulaire** avec les **design patterns Factory, Strategy et Dependency Injection**, respectant les **principes SOLID**.
 
-- **Generate Secret Keys:** Dynamically generate secure keys for signing data.
-- **Sign Transactions:** Create HMAC signatures for transaction details.
-- **Verify Signatures:** Validate the authenticity and integrity of signed transactions.
-- **REST API Integration:** Expose endpoints to interact with the system.
-- **Lightweight Security:** Use cryptography to secure sensitive operations efficiently.
+## 🛠 Technologies utilisées
+- **Java 17** + **Spring Boot**
+- **Bouncy Castle** (Cryptographie)
+- **JUnit & Mockito** (Tests unitaires)
+- **Redis** (Optimisation des performances)
+- **Docker** (Déploiement)
 
----
+## 📖 Endpoints API
+### 🔹 1. Signer un message
+**POST** `/crypto/sign`
+```json
+{
+  "algorithm": "EdDSA",
+  "message": "HelloWorld"
+}
+```
+📌 **Réponse :** Signature du message en Base64.
 
+### 🔹 2. Vérifier une signature
+**POST** `/crypto/verify`
+```json
+{
+  "algorithm": "EdDSA",
+  "message": "HelloWorld",
+  "signature": "Base64EncodedSignature"
+}
+```
+📌 **Réponse :** `true` si la signature est valide, sinon `false`.
 
-## Getting Started
+## 🏗️ Architecture et Design Patterns
+- **Factory Pattern** → Sélection dynamique de l’algorithme de signature.
+- **Strategy Pattern** → Implémentation de chaque algorithme comme une stratégie indépendante.
+- **Dependency Injection (DIP)** → Gestion des services via Spring.
 
-### Prerequisites
+## ✅ Installation et Exécution
+1. **Cloner le projet** :
+   ```sh
+   git clone https://github.com/ton-repo/crypto-api.git
+   cd crypto-api
+   ```
+2. **Construire et exécuter l’API** :
+   ```sh
+   mvn clean install
+   mvn spring-boot:run
+   ```
+3. **Tester avec Postman** ou `curl`.
 
-Before you begin, ensure you have the following installed:
-- **Java 17 or later**
-- **Maven**
-- **Postman** (optional, for testing the APIs)
+## 📌 Améliorations possibles
+- 🔹 **Ajout d’un stockage sécurisé pour les clés privées.**
+- 🔹 **Support d’autres algorithmes (DSA, ChaCha20).**
+- 🔹 **Ajout d’un cache Redis pour optimiser les performances.**
 
----
-
-## Installation
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/Karim-Dahmani/Securing-Transactions-HMAC.git
-   cd Securing-Transactions-HMAC
-   
-## Project Structure
-src
-├── main
-│   ├── java
-│   │   ├── com.example.digitalsignature
-│   │   │   ├── controller
-│   │   │   │   └── HMACController.java
-│   │   │   ├── dto
-│   │   │   │   └── TransactionRequest.java
-│   │   │   ├── util
-│   │   │   │   └── HMACUtil.java
-│   │   │   └── DigitalSignatureApplication.java
-│   ├── resources
-│   │   └── application.properties
-├── test
-└── README.md
-
-### Notes:
-- https://medium.com/@dahmanimohammedkarim/securing-financial-transactions-with-hmac-implementation-and-api-with-spring-boot-f0fc9c520904.
-
+🚀 **Contribuez ou testez l’API et améliorez votre sécurité numérique !**
